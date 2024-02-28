@@ -14,17 +14,18 @@ public class ArrayStorage {
     }
 
     void save(Resume resume) {
-        storage[amountResumes++] = resume;
+        if (amountResumes < MAX_RESUMES) {
+            storage[amountResumes++] = resume;
+        }
     }
 
     Resume get(String uuid) {
-        Resume resume = null;
         for (int i = 0; i < amountResumes; i++) {
             if (storage[i].toString().equals(uuid)) {
-                resume = storage[i];
+               return storage[i];
             }
         }
-        return resume;
+        return null;
     }
 
     void delete(String uuid) {
@@ -32,7 +33,7 @@ public class ArrayStorage {
             if (storage[i].toString().equals(uuid)) {
                 amountResumes--;
                 if (i != amountResumes) {
-                    System.arraycopy(storage, i + 1, storage, i, amountResumes - i);
+                    storage[i] = storage[amountResumes];
                 }
                 storage[amountResumes] = null;
                 return;
