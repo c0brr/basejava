@@ -1,6 +1,7 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -32,17 +33,16 @@ public class ArrayStorage {
 
     public void update(Resume resume) {
         for (int i = 0; i < size; i++) {
-            if (resume.toString().equals(storage[i].toString())) {
-                System.out.println("Введите обновленный uuid: ");
+            if (storage[i].toString().equals(resume.toString())) {
+                System.out.println("Введите новый uuid: ");
                 Scanner scanner = new Scanner(System.in);
                 String newUuid = null;
                 boolean isUuidUnique = false;
                 while (!isUuidUnique) {
                     newUuid = scanner.nextLine();
                     for (int j = 0; j < size; j++) {
-                        if (storage[j].toString().equals(newUuid)) {
-                            System.out.println("Резюме с uuid " + newUuid +
-                                    " уже имеется в базе, введите другой uuid: ");
+                        if (storage[j].toString().equals(newUuid) && j != i) {
+                            System.out.println("Введенный uuid уже существует в базе, введите новый: ");
                             break;
                         }
                         if (j == size - 1) {
@@ -50,12 +50,16 @@ public class ArrayStorage {
                         }
                     }
                 }
-                storage[i].setUuid(newUuid);
+                resume.setUuid(newUuid);
                 scanner.close();
                 return;
             }
         }
-        System.out.println("Ошибка: резюме " + resume + " не найдено");
+        printNotFound(resume.toString());
+    }
+
+    private void printNotFound(String uuid) {
+        System.out.println("Ошибка: резюме " + uuid + " не найдено");
     }
 
     public void delete(String uuid) {
@@ -68,10 +72,6 @@ public class ArrayStorage {
             }
         }
         printNotFound(uuid);
-    }
-
-    private void printNotFound(String uuid) {
-        System.out.println("Ошибка: резюме " + uuid + " не найдено");
     }
 
     public Resume get(String uuid) {
