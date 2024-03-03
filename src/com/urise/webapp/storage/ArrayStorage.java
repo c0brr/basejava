@@ -3,7 +3,6 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * Array based storage for Resumes
@@ -34,24 +33,7 @@ public class ArrayStorage {
     public void update(Resume resume) {
         for (int i = 0; i < size; i++) {
             if (storage[i].toString().equals(resume.toString())) {
-                System.out.println("Введите новый uuid: ");
-                Scanner scanner = new Scanner(System.in);
-                String newUuid = null;
-                boolean isUuidUnique = false;
-                while (!isUuidUnique) {
-                    newUuid = scanner.nextLine();
-                    for (int j = 0; j < size; j++) {
-                        if (storage[j].toString().equals(newUuid) && j != i) {
-                            System.out.println("Введенный uuid уже существует в базе, введите новый: ");
-                            break;
-                        }
-                        if (j == size - 1) {
-                            isUuidUnique = true;
-                        }
-                    }
-                }
-                resume.setUuid(newUuid);
-                scanner.close();
+                storage[i] = resume;
                 return;
             }
         }
