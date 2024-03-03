@@ -19,7 +19,7 @@ public class ArrayStorage {
         if (size < MAX_RESUMES) {
             for (int i = 0; i < size; i++) {
                 if (resume.toString().equals(storage[i].toString())) {
-                    System.out.println("Ошибка: резюме c идентификатором " + resume + " уже имеется в базе");
+                    System.out.println("Ошибка: резюме " + resume + " уже имеется в базе");
                     return;
                 }
             }
@@ -40,7 +40,7 @@ public class ArrayStorage {
     }
 
     private void printNotFound(String uuid) {
-        System.out.println("Ошибка: резюме c идентификатором " + uuid + " не найдено");
+        System.out.println("Ошибка: резюме " + uuid + " не найдено");
     }
 
     public void delete(String uuid) {
