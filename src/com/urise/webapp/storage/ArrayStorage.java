@@ -1,14 +1,15 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
+
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private static final int MAX_RESUMES = 10_000;
-    private final Resume[] storage = new Resume[MAX_RESUMES];
+    private static final int STORAGE_LIMIT = 10_000;
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size;
 
     public int size() {
@@ -16,15 +17,14 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        if (size < MAX_RESUMES) {
-            if (getIndex(resume.getUuid()) >= 0) {
-                System.out.println("Ошибка: резюме " + resume.getUuid() + " уже имеется в базе");
-                return;
-            }
+        String uuid = resume.getUuid();
+        if (size >= STORAGE_LIMIT) {
+            System.out.println("Error: storage overflow");
+        } else if (getIndex(uuid) >= 0) {
+            System.out.println("Error: resume " + uuid + " already exists");
+        } else {
             storage[size++] = resume;
-            return;
         }
-        System.out.println("Ошибка: хранилище заполнено");
     }
 
     public void update(Resume resume) {
@@ -61,9 +61,6 @@ public class ArrayStorage {
         size = 0;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
@@ -78,6 +75,6 @@ public class ArrayStorage {
     }
 
     private void printNotFound(String uuid) {
-        System.out.println("Ошибка: резюме " + uuid + " не найдено");
+        System.out.println("Error: resume " + uuid + " not exists");
     }
 }
