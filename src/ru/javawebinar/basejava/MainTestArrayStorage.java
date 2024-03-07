@@ -1,31 +1,28 @@
-package com.urise.webapp;
+package ru.javawebinar.basejava;
 
-import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ArrayStorage;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.ArrayStorage;
+import ru.javawebinar.basejava.storage.Storage;
 
 /**
- * Test for your com.urise.webapp.storage.ArrayStorage implementation
+ * Test ru.javawebinar.basejava.storage.ArrayStorage
  */
 public class MainTestArrayStorage {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    private static final Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
-        Resume resume1 = new Resume();
+        final Resume resume1 = new Resume();
         resume1.setUuid("uuid1");
-        Resume resume2 = new Resume();
+        final Resume resume2 = new Resume();
         resume2.setUuid("uuid2");
-        Resume resume3 = new Resume();
+        final Resume resume3 = new Resume();
         resume3.setUuid("uuid3");
-        Resume resume4 = new Resume();
-        resume4.setUuid("uuid3");
 
         ARRAY_STORAGE.save(resume1);
         ARRAY_STORAGE.save(resume2);
         ARRAY_STORAGE.save(resume3);
 
-        ARRAY_STORAGE.update(resume4);
-
-        System.out.println("Get resume1: " + ARRAY_STORAGE.get(resume1.toString()));
+        System.out.println("Get resume1: " + ARRAY_STORAGE.get(resume1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
