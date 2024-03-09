@@ -12,60 +12,61 @@ public abstract class AbstractArrayStorage implements Storage {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
 
-    public int size() {
+    public final int size() {
         return size;
     }
 
-    public void save(Resume resume) {
+    public final void save(Resume resume) {
         String uuid = resume.getUuid();
         if (size >= STORAGE_LIMIT) {
             System.out.println("Error: storage overflow");
-        } else if (getIndex(uuid) != -1) {
+        } else if (getIndex(uuid) >= 0) {
             System.out.println("Error: resume " + uuid + " already exists");
         } else {
-            storage[size++] = resume;
+            addResume(resume);
         }
     }
 
-    public void delete(String uuid) {
-        int resumeIndex = getIndex(uuid);
-        if (resumeIndex == -1) {
+    public final void delete(String uuid) {
+        if (getIndex(uuid) < 0) {
             printNotFound(uuid);
             return;
         }
-        storage[resumeIndex] = storage[size - 1];
-        storage[size - 1] = null;
-        size--;
+        deleteResume(uuid);
     }
 
-    public Resume get(String uuid) {
+    public final Resume get(String uuid) {
         int resumeIndex = getIndex(uuid);
-        if (resumeIndex == -1) {
+        if (resumeIndex < 0) {
             printNotFound(uuid);
             return null;
         }
         return storage[resumeIndex];
     }
 
-    public void update(Resume resume) {
+    public final void update(Resume resume) {
         int resumeIndex = getIndex(resume.getUuid());
-        if (resumeIndex == -1) {
+        if (resumeIndex < 0) {
             printNotFound(resume.getUuid());
             return;
         }
         storage[resumeIndex] = resume;
     }
 
-    public void clear() {
+    public final void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public Resume[] getAll() {
+    public final Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 
     protected abstract int getIndex(String uuid);
+
+    protected abstract void addResume(Resume resume);
+
+    protected abstract void deleteResume(String uuid);
 
     private void printNotFound(String uuid) {
         System.out.println("Error: resume " + uuid + " not exists");
