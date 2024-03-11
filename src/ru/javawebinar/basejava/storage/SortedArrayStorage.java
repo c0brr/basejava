@@ -14,8 +14,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void addResume(Resume resume) {
-        int insertionIndex = Math.abs(getIndex(resume.getUuid()) + 1);
+    protected void addResume(Resume resume, int foundIndex) {
+        int insertionIndex = Math.abs(foundIndex + 1);
         if (insertionIndex != size) {
             System.arraycopy(storage, insertionIndex, storage,
                     insertionIndex + 1, size - insertionIndex);
@@ -24,11 +24,10 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteResume(String uuid) {
-        int index = getIndex(uuid);
+    protected void deleteResume(int foundIndex) {
         int lastIndex = size - 1;
-        if (index != lastIndex) {
-            System.arraycopy(storage, index + 1, storage, index, lastIndex - index);
+        if (foundIndex != lastIndex) {
+            System.arraycopy(storage, foundIndex + 1, storage, foundIndex, lastIndex - foundIndex);
         }
         storage[lastIndex] = null;
     }
