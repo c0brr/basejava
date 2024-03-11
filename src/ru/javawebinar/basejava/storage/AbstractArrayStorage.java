@@ -12,7 +12,7 @@ public abstract class AbstractArrayStorage implements Storage {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
 
-    public final int size() {
+    public int size() {
         return size;
     }
 
@@ -24,6 +24,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Error: resume " + uuid + " already exists");
         } else {
             addResume(resume);
+            size++;
         }
     }
 
@@ -33,6 +34,7 @@ public abstract class AbstractArrayStorage implements Storage {
             return;
         }
         deleteResume(uuid);
+        size--;
     }
 
     public final Resume get(String uuid) {
@@ -53,12 +55,12 @@ public abstract class AbstractArrayStorage implements Storage {
         storage[resumeIndex] = resume;
     }
 
-    public final void clear() {
+    public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public final Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 

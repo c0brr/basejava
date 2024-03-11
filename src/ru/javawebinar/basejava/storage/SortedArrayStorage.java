@@ -21,16 +21,15 @@ public class SortedArrayStorage extends AbstractArrayStorage {
                     insertionIndex + 1, size - insertionIndex);
         }
         storage[insertionIndex] = resume;
-        size++;
     }
 
     @Override
     protected void deleteResume(String uuid) {
         int index = getIndex(uuid);
-        size--;
-        if (index != size) {
-            System.arraycopy(storage, index + 1, storage, index, size - index);
+        int lastIndex = size - 1;
+        if (index != lastIndex) {
+            System.arraycopy(storage, index + 1, storage, index, lastIndex - index);
         }
-        storage[size] = null;
+        storage[lastIndex] = null;
     }
 }
