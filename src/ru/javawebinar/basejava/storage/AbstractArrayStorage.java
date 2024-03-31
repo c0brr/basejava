@@ -40,7 +40,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume resume, int resumeIndex) {
+    protected void updateResume(int resumeIndex, Resume resume) {
         storage[resumeIndex] = resume;
     }
 

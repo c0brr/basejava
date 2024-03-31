@@ -42,7 +42,7 @@ public abstract class AbstractStorage implements Storage {
         if (resumeIndex < 0) {
             throw new NotExistStorageException(resume.getUuid());
         }
-        updateResume(resume, resumeIndex);
+        updateResume(resumeIndex, resume);
     }
 
     protected abstract void checkOverflow(String uuid);
@@ -55,5 +55,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume getResume(int resumeIndex);
 
-    protected abstract void updateResume(Resume resume, int resumeIndex);
+    protected abstract void updateResume(int resumeIndex, Resume resume);
 }
