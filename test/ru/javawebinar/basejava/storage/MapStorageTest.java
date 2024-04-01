@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-public class ListStorageTest {
-    private final ListStorage storage = new ListStorage();
+import java.util.Arrays;
+
+public class MapStorageTest {
+    private final MapStorage storage = new MapStorage();
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
@@ -16,7 +18,6 @@ public class ListStorageTest {
     private static final Resume RESUME_2 = new Resume(UUID_2);
     private static final Resume RESUME_3 = new Resume(UUID_3);
     private static final Resume RESUME_4 = new Resume(UUID_4);
-    private static final int DUMMY = Integer.MIN_VALUE;
 
     @BeforeEach
     public void setUp() {
@@ -33,42 +34,42 @@ public class ListStorageTest {
 
     @Test
     public void getSearchKey() {
-        assertGetSearchKey(0, UUID_1);
-        assertGetSearchKey(1, UUID_2);
-        assertGetSearchKey(2, UUID_3);
-        assertGetSearchKey(-1, UUID_4);
+        assertGetSearchKey(UUID_1);
+        assertGetSearchKey(UUID_2);
+        assertGetSearchKey(UUID_3);
+        assertGetSearchKey(null);
     }
 
     @Test
     public void isExist() {
-        assertIsExist(0);
-        assertIsExist(1);
-        assertIsExist(2);
-        Assertions.assertFalse(storage.isExist(-1));
+        assertIsExist(UUID_1);
+        assertIsExist(UUID_2);
+        assertIsExist(UUID_3);
+        Assertions.assertFalse(storage.isExist(null));
     }
 
     @Test
     public void doSave() {
-        storage.doSave(RESUME_4, DUMMY);
+        storage.doSave(RESUME_4, UUID_4);
         assertSize(4);
         assertGet(RESUME_4);
     }
 
     @Test
     public void doDelete() {
-        storage.doDelete(1);
+        storage.doDelete(UUID_2);
         assertSize(2);
         Assertions.assertThrows(NotExistStorageException.class, () -> assertGet(RESUME_2));
     }
 
     @Test
     public void doGet() {
-        Assertions.assertEquals(RESUME_3, storage.doGet(2));
+        Assertions.assertEquals(RESUME_3, storage.doGet(UUID_3));
     }
 
     @Test
     public void doUpdate() {
-        storage.doUpdate(0, RESUME_1);
+        storage.doUpdate(UUID_1, RESUME_1);
         Assertions.assertSame(RESUME_1, storage.get(UUID_1));
     }
 
@@ -91,12 +92,12 @@ public class ListStorageTest {
         Assertions.assertEquals(size, storage.size());
     }
 
-    private void assertGetSearchKey(int index, String uuid) {
-        Assertions.assertEquals(index, storage.getSearchKey(uuid));
+    private void assertGetSearchKey(String uuid) {
+        Assertions.assertEquals(uuid, storage.getSearchKey(uuid));
     }
 
-    private void assertIsExist(int index) {
-        Assertions.assertTrue(storage.isExist(index));
+    private void assertIsExist(String uuid) {
+        Assertions.assertTrue(storage.isExist(uuid));
     }
 
     private void assertGet(Resume resume) {
@@ -104,6 +105,8 @@ public class ListStorageTest {
     }
 
     private void assertArrayEquals(Resume[] resumes) {
-        Assertions.assertArrayEquals(resumes, storage.getAll());
+        Resume[] actual = storage.getAll();
+        Arrays.sort(actual);
+        Assertions.assertArrayEquals(resumes, actual);
     }
 }

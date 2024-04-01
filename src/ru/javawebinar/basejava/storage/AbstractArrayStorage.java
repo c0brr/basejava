@@ -23,25 +23,33 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected final void addResume(Resume resume, int foundIndex) {
-        insertElement(resume, foundIndex);
+    protected boolean isExist(Object searchKey) {
+        if ((int) searchKey >= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected final void doSave(Resume resume, Object searchKey) {
+        insertElement(resume, searchKey);
         size++;
     }
 
     @Override
-    protected final void deleteResume(int foundIndex) {
-        fillDeletedElement(foundIndex);
+    protected final void doDelete(Object searchKey) {
+        fillDeletedElement(searchKey);
         size--;
     }
 
     @Override
-    protected Resume getResume(int resumeIndex) {
-        return storage[resumeIndex];
+    protected Resume doGet(Object searchKey) {
+        return storage[(int) searchKey];
     }
 
     @Override
-    protected void updateResume(int resumeIndex, Resume resume) {
-        storage[resumeIndex] = resume;
+    protected void doUpdate(Object searchKey, Resume resume) {
+        storage[(int) searchKey] = resume;
     }
 
     @Override
@@ -55,7 +63,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOf(storage, size);
     }
 
-    protected abstract void insertElement(Resume resume, int foundIndex);
+    protected abstract void insertElement(Resume resume, Object searchKey);
 
-    protected abstract void fillDeletedElement(int foundIndex);
+    protected abstract void fillDeletedElement(Object searchKey);
 }
