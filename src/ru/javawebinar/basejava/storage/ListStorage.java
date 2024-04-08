@@ -14,11 +14,6 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void checkOverflow(String uuid) {
-
-    }
-
-    @Override
     protected Object getSearchKey(String uuid) {
         for (Resume resume : storage) {
             if (resume.getUuid().equals(uuid)) {
@@ -30,10 +25,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object searchKey) {
-        if ((int) searchKey >= 0) {
-            return true;
-        }
-        return false;
+        return (int) searchKey >= 0;
     }
 
     @Override

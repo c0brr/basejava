@@ -9,7 +9,6 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public final void save(Resume resume) {
         String uuid = resume.getUuid();
-        checkOverflow(uuid);
         doSave(resume, getNotExistingSearchKey(uuid));
     }
 
@@ -43,8 +42,6 @@ public abstract class AbstractStorage implements Storage {
         }
         return searchKey;
     }
-
-    protected abstract void checkOverflow(String uuid);
 
     protected abstract Object getSearchKey(String uuid);
 

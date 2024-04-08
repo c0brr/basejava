@@ -14,15 +14,10 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void checkOverflow(String uuid) {
-
-    }
-
-    @Override
     protected Object getSearchKey(String uuid) {
         for (Map.Entry<String, Resume> entry : storage.entrySet()) {
             if (entry.getKey().equals(uuid)) {
-                return entry.getKey();
+                return uuid;
             }
         }
         return null;
@@ -30,10 +25,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object searchKey) {
-        if (searchKey != null) {
-            return true;
-        }
-        return false;
+        return storage.containsKey((String) searchKey);
     }
 
     @Override

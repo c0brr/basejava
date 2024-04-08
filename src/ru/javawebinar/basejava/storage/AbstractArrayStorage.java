@@ -16,22 +16,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void checkOverflow(String uuid) {
-        if (size >= STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", uuid);
-        }
-    }
-
-    @Override
     protected boolean isExist(Object searchKey) {
-        if ((int) searchKey >= 0) {
-            return true;
-        }
-        return false;
+        return (int) searchKey >= 0;
     }
 
     @Override
     protected final void doSave(Resume resume, Object searchKey) {
+        if (size >= STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", resume.getUuid());
+        }
         insertElement(resume, searchKey);
         size++;
     }
