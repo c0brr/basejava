@@ -25,13 +25,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
-        insertElement(resume, (int) searchKey);
+        insertElement(resume, searchKey);
         size++;
     }
 
     @Override
     protected final void doDelete(Object searchKey) {
-        fillDeletedElement((int) searchKey);
+        fillDeletedElement(searchKey);
         size--;
     }
 
@@ -56,9 +56,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOf(storage, size);
     }
 
-    protected abstract Integer getSearchKey(String uuid);
+    protected abstract void insertElement(Resume resume, Object searchKey);
 
-    protected abstract void insertElement(Resume resume, int searchKey);
-
-    protected abstract void fillDeletedElement(int searchKey);
+    protected abstract void fillDeletedElement(Object searchKey);
 }
