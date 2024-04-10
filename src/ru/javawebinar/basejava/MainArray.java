@@ -1,7 +1,7 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.MapStorage;
+import ru.javawebinar.basejava.storage.MapUuidStorage;
 import ru.javawebinar.basejava.storage.Storage;
 
 import java.io.BufferedReader;
@@ -12,7 +12,8 @@ import java.io.InputStreamReader;
  * Interactive test for ru.javawebinar.basejava.storage.ArrayStorage implementation
  */
 public class MainArray {
-    private final static Storage ARRAY_STORAGE = new MapStorage();
+    private final static Storage ARRAY_STORAGE = new MapUuidStorage();
+    private static final String SOME_FULL_NAME = "Some fullName";
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -36,7 +37,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    resume = new Resume(uuid);
+                    resume = new Resume(uuid, SOME_FULL_NAME);
                     ARRAY_STORAGE.save(resume);
                     printAll();
                     break;
@@ -48,7 +49,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.get(uuid));
                     break;
                 case "update":
-                    resume = new Resume(uuid);
+                    resume = new Resume(uuid, SOME_FULL_NAME);
                     ARRAY_STORAGE.update(resume);
                     printAll();
                     break;

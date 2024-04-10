@@ -9,12 +9,13 @@ import ru.javawebinar.basejava.storage.Storage;
  */
 public class MainTestArrayStorage {
     private static final Storage ARRAY_STORAGE = new ListStorage();
+    private static final String SOME_FULL_NAME = "Some fullName";
 
     public static void main(String[] args) {
-        final Resume resume1 = new Resume("uuid1");
-        final Resume resume2 = new Resume("uuid2");
-        final Resume resume3 = new Resume("uuid3");
-        final Resume resume4 = new Resume("uuid3");
+        final Resume resume1 = new Resume("uuid1", SOME_FULL_NAME);
+        final Resume resume2 = new Resume("uuid2", SOME_FULL_NAME);
+        final Resume resume3 = new Resume("uuid3", SOME_FULL_NAME);
+        final Resume resume4 = new Resume("uuid3", SOME_FULL_NAME);
 
         ARRAY_STORAGE.save(resume1);
         ARRAY_STORAGE.save(resume2);
