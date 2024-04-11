@@ -7,18 +7,19 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Arrays;
-
 public abstract class AbstractStorageTest {
-    private static final String SOME_FULL_NAME = "Some fullName";
+    private static final String FULL_NAME_1 = "Petr Ivanov";
+    private static final String FULL_NAME_2 = "Arseniy Sidorov";
+    private static final String FULL_NAME_3 = "Anna Nikolaeva";
+    private static final String FULL_NAME_4 = "Ksenia Popova";
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
-    private static final Resume RESUME_1 = new Resume(UUID_1, SOME_FULL_NAME);
-    private static final Resume RESUME_2 = new Resume(UUID_2, SOME_FULL_NAME);
-    private static final Resume RESUME_3 = new Resume(UUID_3, SOME_FULL_NAME);
-    private static final Resume RESUME_4 = new Resume(UUID_4, SOME_FULL_NAME);
+    private static final Resume RESUME_1 = new Resume(UUID_1, FULL_NAME_1);
+    private static final Resume RESUME_2 = new Resume(UUID_2, FULL_NAME_2);
+    private static final Resume RESUME_3 = new Resume(UUID_3, FULL_NAME_3);
+    private static final Resume RESUME_4 = new Resume(UUID_4, FULL_NAME_4);
     protected final Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
@@ -96,8 +97,8 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
-        Resume[] expected = {RESUME_1, RESUME_2, RESUME_3};
+    public void getAllSorted() {
+        Resume[] expected = {RESUME_3, RESUME_2, RESUME_1};
         assertArrayEquals(expected);
     }
 
@@ -110,10 +111,7 @@ public abstract class AbstractStorageTest {
     }
 
     private void assertArrayEquals(Resume[] resumes) {
-        Resume[] actual = storage.getAll();
-        if (storage instanceof MapUuidStorage) {
-            Arrays.sort(actual, (o1, o2) -> o1.getUuid().compareTo(o2.getUuid()));
-        }
+        Resume[] actual = storage.getAllSorted().toArray(new Resume[0]);
         Assert.assertArrayEquals(resumes, actual);
     }
 }
