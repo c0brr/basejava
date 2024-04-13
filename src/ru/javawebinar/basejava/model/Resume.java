@@ -1,18 +1,15 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.UUID;
-
 public class Resume {
-    private static final String SOME_FULL_NAME = "Some fullName";
     private final String uuid;
-    private final String fullName;
+    private String fullName;
 
-    public Resume() {
-        this(UUID.randomUUID().toString(), SOME_FULL_NAME);
+    public Resume(String uuid) {
+        this.uuid = uuid;
     }
 
     public Resume(String uuid, String fullName) {
-        this.uuid = uuid;
+        this(uuid);
         this.fullName = fullName;
     }
 
