@@ -33,7 +33,7 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public final List<Resume> getAllSorted() {
-        List<Resume> resumeList = getAll();
+        List<Resume> resumeList = doGetAll();
         resumeList.sort(RESUME_COMPARATOR);
         return resumeList;
     }
@@ -66,5 +66,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void doUpdate(Object searchKey, Resume resume);
 
-    protected abstract List<Resume> getAll();
+    protected abstract List<Resume> doGetAll();
 }
