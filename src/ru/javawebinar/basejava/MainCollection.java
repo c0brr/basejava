@@ -13,13 +13,12 @@ public class MainCollection {
     private static final Resume RESUME_2;
     private static final Resume RESUME_3;
     private static final Resume RESUME_4;
-    private static final String SOME_FULL_NAME = "Some fullName";
 
     static {
-        RESUME_1 = new Resume(UUID_1, SOME_FULL_NAME);
-        RESUME_2 = new Resume(UUID_2, SOME_FULL_NAME);
-        RESUME_3 = new Resume(UUID_3, SOME_FULL_NAME);
-        RESUME_4 = new Resume(UUID_4, SOME_FULL_NAME);
+        RESUME_1 = new Resume(UUID_1, "Name1");
+        RESUME_2 = new Resume(UUID_2, "Name2");
+        RESUME_3 = new Resume(UUID_3, "Name3");
+        RESUME_4 = new Resume(UUID_4, "Name4");
     }
 
     public static void main(String[] args) {

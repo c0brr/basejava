@@ -6,7 +6,6 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public class AbstractArrayStorageTest extends AbstractStorageTest {
-    private static final String SOME_FULL_NAME = "Some fullName";
 
     protected AbstractArrayStorageTest(Storage storage) {
         super(storage);
@@ -17,11 +16,11 @@ public class AbstractArrayStorageTest extends AbstractStorageTest {
         storage.clear();
         try {
             for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume(SOME_FULL_NAME));
+                storage.save(new Resume());
             }
         } catch (StorageException e) {
             Assert.fail("Storage overflow happened ahead of time");
         }
-        storage.save(new Resume(SOME_FULL_NAME));
+        storage.save(new Resume());
     }
 }

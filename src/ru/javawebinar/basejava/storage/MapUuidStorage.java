@@ -6,10 +6,7 @@ public class MapUuidStorage extends AbstractMapStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
-        if (storage.containsKey(uuid)) {
             return uuid;
-        }
-        return null;
     }
 
     @Override
@@ -19,7 +16,7 @@ public class MapUuidStorage extends AbstractMapStorage {
 
     @Override
     protected void doSave(Resume resume, Object searchKey) {
-        storage.put(resume.getUuid(), resume);
+        storage.put((String) searchKey, resume);
     }
 
     @Override
