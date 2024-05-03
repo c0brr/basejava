@@ -10,14 +10,14 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     private static final String DUMMY = "";
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid, DUMMY);
         return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
     }
 
     @Override
-    protected void insertElement(Resume resume, Object searchKey) {
-        int insertionIndex = Math.abs(((int) searchKey) + 1);
+    protected void insertElement(Resume resume, Integer searchKey) {
+        int insertionIndex = Math.abs((searchKey) + 1);
         if (insertionIndex != size) {
             System.arraycopy(storage, insertionIndex, storage,
                     insertionIndex + 1, size - insertionIndex);
@@ -26,11 +26,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void fillDeletedElement(Object searchKey) {
+    protected void fillDeletedElement(Integer searchKey) {
         int lastIndex = size - 1;
-        if ((int) searchKey != lastIndex) {
-            System.arraycopy(storage, ((int) searchKey) + 1, storage,
-                    (int) searchKey, lastIndex - ((int) searchKey));
+        if (searchKey != lastIndex) {
+            System.arraycopy(storage, (searchKey) + 1, storage,
+                    searchKey, lastIndex - (searchKey));
         }
         storage[lastIndex] = null;
     }
