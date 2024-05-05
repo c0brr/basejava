@@ -5,8 +5,8 @@ import java.util.*;
 public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
-    private final Map<ContactType, String> contacts = new HashMap<>();
-    private final Map<SectionType, AbstractSection> sections = new HashMap<>();
+    private final Map<ContactType, String> contacts = new TreeMap<>();
+    private final Map<SectionType, AbstractSection> sections = new TreeMap<>();
 
     public Resume() {
         this(UUID.randomUUID().toString(), "");
@@ -37,6 +37,14 @@ public class Resume implements Comparable<Resume> {
 
     public Map<SectionType, AbstractSection> getSections() {
         return sections;
+    }
+
+    public void addSection(SectionType sectionType, AbstractSection section) {
+        sections.put(sectionType, section);
+    }
+
+    public void addContact(ContactType contactType, String contact) {
+        contacts.put(contactType, contact);
     }
 
     @Override

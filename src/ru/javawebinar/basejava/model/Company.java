@@ -20,6 +20,18 @@ public class Company {
         return website;
     }
 
+    public void addPeriod(Period period) {
+        periods.add(period);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,10 +51,7 @@ public class Company {
 
     @Override
     public String toString() {
-        return "Company{" +
-                "periods=" + periods +
-                ", name='" + name + '\'' +
-                ", website='" + website + '\'' +
-                '}';
+        return (website != null ? name + "\n" + website + "\n" + periods :
+                name + "\n" + periods);
     }
 }

@@ -10,6 +10,10 @@ public class CompanySection extends AbstractSection {
         return companies;
     }
 
+    public void addCompany(Company company) {
+        companies.add(company);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

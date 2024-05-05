@@ -1,8 +1,10 @@
 package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Period {
+    private static final DateTimeFormatter DTF =  DateTimeFormatter.ofPattern("MM/yyyy");
     private LocalDate startDate;
     private LocalDate endDate;
     private String title;
@@ -22,6 +24,22 @@ public class Period {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -45,11 +63,7 @@ public class Period {
 
     @Override
     public String toString() {
-        return "Period{" +
-                "startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        String string = DTF.format(startDate) + " - " + DTF.format(endDate) + "\n" + title;
+        return (description == null ? string : string + "\n" + description);
     }
 }

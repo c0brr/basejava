@@ -1,10 +1,14 @@
 package ru.javawebinar.basejava.model;
 
 public class TextSection extends AbstractSection {
-    private String description;
+    private String content;
 
-    public String getDescription() {
-        return description;
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override
@@ -13,16 +17,16 @@ public class TextSection extends AbstractSection {
         if (o == null || getClass() != o.getClass()) return false;
 
         TextSection that = (TextSection) o;
-        return description.equals(that.description);
+        return content.equals(that.content);
     }
 
     @Override
     public int hashCode() {
-        return description.hashCode();
+        return content.hashCode();
     }
 
     @Override
     public String toString() {
-        return  description;
+        return content;
     }
 }

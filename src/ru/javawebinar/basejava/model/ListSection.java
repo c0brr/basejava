@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListSection extends AbstractSection {
-    private final List<String> descriptions = new ArrayList<>();
+    private final List<String> contentList = new ArrayList<>();
 
-    public List<String> getDescriptions() {
-        return descriptions;
+    public List<String> getList() {
+        return contentList;
+    }
+
+    public void addContent(String content) {
+        contentList.add(content);
     }
 
     @Override
@@ -16,16 +20,16 @@ public class ListSection extends AbstractSection {
         if (o == null || getClass() != o.getClass()) return false;
 
         ListSection that = (ListSection) o;
-        return descriptions.equals(that.descriptions);
+        return contentList.equals(that.contentList);
     }
 
     @Override
     public int hashCode() {
-        return descriptions.hashCode();
+        return contentList.hashCode();
     }
 
     @Override
     public String toString() {
-        return descriptions.toString();
+        return contentList.toString();
     }
 }
