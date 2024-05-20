@@ -2,44 +2,27 @@ package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Period {
     private static final DateTimeFormatter DTF =  DateTimeFormatter.ofPattern("MM/yyyy");
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String title;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final String title;
     private String description;
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
+    public Period(LocalDate startDate, LocalDate endDate, String title, String description) {
+        this(startDate, endDate, title);
         this.description = description;
+    }
+
+    public Period(LocalDate startDate, LocalDate endDate, String title) {
+        Objects.requireNonNull(startDate, "startDate must not be null");
+        Objects.requireNonNull(endDate, "endDate must not be null");
+        Objects.requireNonNull(title, "title must not be null");
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.title = title;
     }
 
     @Override
@@ -48,8 +31,10 @@ public class Period {
         if (o == null || getClass() != o.getClass()) return false;
 
         Period period = (Period) o;
-        return startDate.equals(period.startDate) && endDate.equals(period.endDate) &&
-                title.equals(period.title) && description.equals(period.description);
+        return startDate.equals(period.startDate) &&
+                endDate.equals(period.endDate) &&
+                title.equals(period.title) &&
+                Objects.equals(description, period.description);
     }
 
     @Override
@@ -57,13 +42,14 @@ public class Period {
         int result = startDate.hashCode();
         result = 31 * result + endDate.hashCode();
         result = 31 * result + title.hashCode();
-        result = 31 * result + description.hashCode();
+        result = 31 * result + Objects.hashCode(description);
         return result;
     }
 
     @Override
     public String toString() {
-        String string = DTF.format(startDate) + " - " + DTF.format(endDate) + "\n" + title;
-        return (description == null ? string : string + "\n" + description);
+        return (description == null ?
+                DTF.format(startDate) + " - " + DTF.format(endDate) + "\n" + title :
+                DTF.format(startDate) + " - " + DTF.format(endDate) + "\n" + title + "\n" + description);
     }
 }

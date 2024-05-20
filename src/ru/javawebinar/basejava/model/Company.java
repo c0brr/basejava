@@ -1,35 +1,27 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Company {
-    private final List<Period> periods = new ArrayList<>();
-    private String name;
+    private final List<Period> periods;
+    private final String name;
     private String website;
 
-    public List<Period> getPeriods() {
-        return periods;
+    public Company(List<Period> periods, String name, String website) {
+        this(periods, name);
+        this.website = website;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getWebsite() {
-        return website;
+    public Company(List<Period> periods, String name) {
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(periods, "periods must not be null");
+        this.periods = periods;
+        this.name = name;
     }
 
     public void addPeriod(Period period) {
         periods.add(period);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
     }
 
     @Override
@@ -38,20 +30,25 @@ public class Company {
         if (o == null || getClass() != o.getClass()) return false;
 
         Company company = (Company) o;
-        return periods.equals(company.periods) && name.equals(company.name) && website.equals(company.website);
+        return periods.equals(company.periods) && name.equals(company.name) && Objects.equals(website, company.website);
     }
 
     @Override
     public int hashCode() {
         int result = periods.hashCode();
         result = 31 * result + name.hashCode();
-        result = 31 * result + website.hashCode();
+        result = 31 * result + Objects.hashCode(website);
         return result;
     }
 
     @Override
     public String toString() {
-        return (website != null ? name + "\n" + website + "\n" + periods :
-                name + "\n" + periods);
+        StringBuilder stringBuilder = new StringBuilder(website == null ?
+                name + "\n" :
+                name + "\n" + website + "\n");
+        for (Period period : periods) {
+            stringBuilder.append(period.toString()).append("\n");
+        }
+        return stringBuilder.toString();
     }
 }

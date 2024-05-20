@@ -1,13 +1,12 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.Objects;
+
 public class TextSection extends AbstractSection {
-    private String content;
+    private final String content;
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
+    public TextSection(String content) {
+        Objects.requireNonNull(content, "content must not be null");
         this.content = content;
     }
 

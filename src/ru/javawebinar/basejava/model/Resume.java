@@ -2,11 +2,11 @@ package ru.javawebinar.basejava.model;
 
 import java.util.*;
 
-public class Resume implements Comparable<Resume> {
+public class Resume {
     private final String uuid;
     private final String fullName;
-    private final Map<ContactType, String> contacts = new TreeMap<>();
-    private final Map<SectionType, AbstractSection> sections = new TreeMap<>();
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume() {
         this(UUID.randomUUID().toString(), "");
@@ -31,20 +31,20 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public Map<ContactType, String> getContacts() {
-        return contacts;
+    public String getContact(ContactType type) {
+        return contacts.get(type);
     }
 
-    public Map<SectionType, AbstractSection> getSections() {
-        return sections;
+    public AbstractSection getSection(SectionType type) {
+        return sections.get(type);
     }
 
-    public void addSection(SectionType sectionType, AbstractSection section) {
-        sections.put(sectionType, section);
+    public void addContact(ContactType type, String contact) {
+        contacts.put(type, contact);
     }
 
-    public void addContact(ContactType contactType, String contact) {
-        contacts.put(contactType, contact);
+    public void addSection(SectionType type, AbstractSection section) {
+        sections.put(type, section);
     }
 
     @Override
@@ -66,11 +66,5 @@ public class Resume implements Comparable<Resume> {
     @Override
     public String toString() {
         return uuid + '(' + fullName + ')';
-    }
-
-    @Override
-    public int compareTo(Resume o) {
-        int cmp = fullName.compareTo(o.fullName);
-        return cmp != 0 ? cmp : uuid.compareTo(o.uuid);
     }
 }
