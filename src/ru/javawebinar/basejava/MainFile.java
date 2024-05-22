@@ -1,9 +1,10 @@
 package ru.javawebinar.basejava;
 
 import java.io.File;
+import java.io.IOException;
 
 public class MainFile {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        String filePath = ".\\.gitignore";
 //        File file = new File(filePath);
 //        try {
@@ -25,18 +26,21 @@ public class MainFile {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-
-        recursion(new File("C:\\My Files\\Java\\BaseJava\\basejava"));
+        recursion(new File(".").getCanonicalFile());
     }
 
-    public static void recursion(File file) {
+    public static void recursion(File file) throws IOException {
         if (file.isDirectory()) {
-            System.out.println("(" + file.getParentFile().getName() + ")" + file.getName() + ": ");
-            for (String string : file.list()) {
-                recursion(new File(file.getAbsolutePath() + "\\" + string));
+            File parentFile = file.getParentFile();
+            System.out.println((parentFile != null ? "(" + parentFile.getName() + ")" : "") + file.getName() + ": ");
+            String[] fileList = file.list();
+            if (fileList != null) {
+                for (String string : fileList) {
+                    recursion(new File(file.getCanonicalPath(), string));
+                }
             }
         } else {
-            System.out.println("--" + file.getName());
+            System.out.println("(file) " + file.getName());
         }
     }
 }

@@ -17,7 +17,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
-        if (!directory.canRead() || directory.canWrite()) {
+        if (!directory.canRead() || !directory.canWrite()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
@@ -45,12 +45,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        file.delete();
+        if (!file.delete()) {
+            throw new StorageException("File not deleted", file.getName());
+        }
     }
 
     @Override
     protected Resume doGet(File file) {
-        return doRead(file);
+        Resume resume;
+        try {
+            resume = doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("IO Error", file.getName(), e);
+        }
+        return resume;
     }
 
     @Override
@@ -65,25 +73,33 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> doGetAll() {
         List<Resume> list = new ArrayList<>();
-        for (File file : directory.listFiles()) {
-            list.add(doRead(file));
+        for (File file : getCheckedListFiles()) {
+            list.add(doGet(file));
         }
         return new ArrayList<>(list);
     }
 
     @Override
     public int size() {
-        return directory.listFiles().length;
+        return getCheckedListFiles().length;
     }
 
     @Override
     public void clear() {
-        for (File file : directory.listFiles()) {
-            file.delete();
+        for (File file : getCheckedListFiles()) {
+            doDelete(file);
         }
+    }
+
+    private File[] getCheckedListFiles() {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("IO Error");
+        }
+        return files;
     }
 
     protected abstract void doWrite(Resume resume, File file) throws IOException;
 
-    protected abstract Resume doRead(File file);
+    protected abstract Resume doRead(File file) throws IOException;
 }
