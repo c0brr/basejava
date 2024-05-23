@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Period {
-    private static final DateTimeFormatter DTF =  DateTimeFormatter.ofPattern("MM/yyyy");
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("MM/yyyy");
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final String title;
@@ -23,6 +23,22 @@ public class Period {
         this.startDate = startDate;
         this.endDate = endDate;
         this.title = title;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override

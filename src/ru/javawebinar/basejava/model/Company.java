@@ -20,6 +20,18 @@ public class Company {
         this.name = name;
     }
 
+    public List<Period> getPeriods() {
+        return periods;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
     public void addPeriod(Period period) {
         periods.add(period);
     }
