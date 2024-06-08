@@ -26,21 +26,27 @@ public class MainFile {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-        recursion(new File(".").getCanonicalFile());
+        printDeepDirectory(new File(".").getCanonicalFile(),
+                true, true, new StringBuilder());
     }
 
-    public static void recursion(File file) throws IOException {
+    public static void printDeepDirectory(File file, boolean isRootDirectory, boolean isLastIndex, StringBuilder sb)
+            throws IOException {
+        System.out.println(sb + (!isRootDirectory ? (isLastIndex ? "└───" : "├───") : "") + file.getName());
         if (file.isDirectory()) {
-            File parentFile = file.getParentFile();
-            System.out.println((parentFile != null ? "(" + parentFile.getName() + ")" : "") + file.getName() + ": ");
             String[] fileList = file.list();
             if (fileList != null) {
-                for (String string : fileList) {
-                    recursion(new File(file.getCanonicalPath(), string));
+                for (int i = 0; i < fileList.length; i++) {
+                    if (!isRootDirectory) {
+                        sb.append(isLastIndex ? "    " : "│   ");
+                    }
+                    printDeepDirectory(new File(file.getCanonicalPath(), fileList[i]), false,
+                            i == fileList.length - 1, sb);
+                    if (sb.length() >= 4) {
+                        sb.delete(sb.length() - 4, sb.length());
+                    }
                 }
             }
-        } else {
-            System.out.println("(file) " + file.getName());
         }
     }
 }

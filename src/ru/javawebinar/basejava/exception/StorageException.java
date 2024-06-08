@@ -1,11 +1,11 @@
 package ru.javawebinar.basejava.exception;
 
-public class StorageException extends RuntimeException {
-    private String uuid;
+import java.io.Serial;
 
-    public StorageException(String message) {
-        super(message);
-    }
+public class StorageException extends RuntimeException {
+    @Serial
+    private static final long serialVersionUID = 1L;
+    private final String uuid;
 
     public StorageException(String message, String uuid) {
         super(message);

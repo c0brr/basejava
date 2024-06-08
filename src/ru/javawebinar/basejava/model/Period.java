@@ -1,10 +1,14 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Period {
+public class Period implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("MM/yyyy");
     private final LocalDate startDate;
     private final LocalDate endDate;
