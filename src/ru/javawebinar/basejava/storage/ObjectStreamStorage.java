@@ -6,7 +6,6 @@ import ru.javawebinar.basejava.model.Resume;
 import java.io.*;
 
 public class ObjectStreamStorage extends AbstractSerializationStorage {
-
     public ObjectStreamStorage(Object dir) {
         if (dir instanceof File) {
             storage = new AbstractFileStorage((File) dir) {
