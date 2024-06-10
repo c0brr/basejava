@@ -1,7 +1,8 @@
-package ru.javawebinar.basejava.storage;
+package ru.javawebinar.basejava.storage.strategypattern;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.AbstractStorage;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     private final Path directory;
 
-    protected AbstractPathStorage(String dir) {
+    public AbstractPathStorage(String dir) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
