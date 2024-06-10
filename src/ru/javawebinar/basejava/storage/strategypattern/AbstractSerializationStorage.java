@@ -38,7 +38,7 @@ public abstract class AbstractSerializationStorage {
         };
     }
 
-    public Storage getStorage() {
+    public Storage getStrategy() {
         return strategy;
     }
 

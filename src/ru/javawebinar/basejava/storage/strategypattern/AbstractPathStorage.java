@@ -74,9 +74,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doGetAll() {
-        List<Resume> list = new ArrayList<>();
-        getCheckedDirectoryList().forEach(path -> list.add(doGet(path)));
-        return new ArrayList<>(list);
+        return new ArrayList<>(getCheckedDirectoryList().map(this::doGet).toList());
     }
 
     @Override
