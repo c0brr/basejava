@@ -3,7 +3,7 @@ package ru.javawebinar.basejava;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.ArrayStorage;
-import ru.javawebinar.basejava.storage.strategypattern.Storage;
+import ru.javawebinar.basejava.storage.Storage;
 
 /**
  * Test ru.javawebinar.basejava.storage.ArrayStorage
