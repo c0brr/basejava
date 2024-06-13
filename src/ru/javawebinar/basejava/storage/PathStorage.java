@@ -1,8 +1,8 @@
-package ru.javawebinar.basejava.storage.strategypattern;
+package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.AbstractStorage;
+import ru.javawebinar.basejava.storage.strategypattern.SerializationStrategy;
 
 import java.io.*;
 import java.nio.file.Files;
