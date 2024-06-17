@@ -1,4 +1,4 @@
-package ru.javawebinar.basejava.storage.strategypattern;
+package ru.javawebinar.basejava.storage.serializer;
 
 import ru.javawebinar.basejava.model.Resume;
 
