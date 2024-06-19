@@ -4,9 +4,7 @@ import ru.javawebinar.basejava.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamSerializer implements SerializationStrategy {
 
@@ -16,48 +14,39 @@ public class DataStreamSerializer implements SerializationStrategy {
             dos.writeUTF(resume.getFullName());
 
             Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeWithException(contacts.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            });
 
             Map<SectionType, AbstractSection> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            writeWithException(sections.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 AbstractSection abstractSection = entry.getValue();
-                if (abstractSection instanceof TextSection) {
-                    dos.writeUTF(((TextSection) abstractSection).getContent());
-                } else if (abstractSection instanceof ListSection) {
-                    List<String> list = ((ListSection) abstractSection).getContentList();
-                    dos.writeInt(list.size());
-                    for (String content : list) {
-                        dos.writeUTF(content);
-                    }
-                } else if (abstractSection instanceof CompanySection) {
-                    List<Company> listCompanies = ((CompanySection) abstractSection).getCompanies();
-                    dos.writeInt(listCompanies.size());
-                    for (Company company : listCompanies) {
-                        dos.writeUTF(company.getName());
-                        dos.writeBoolean(company.getWebsite() == null);
-                        if (company.getWebsite() != null) {
-                            dos.writeUTF(company.getWebsite());
-                        }
-                        List<Period> listPeriods = company.getPeriods();
-                        dos.writeInt(listPeriods.size());
-                        for (Period period : listPeriods) {
-                            dos.writeUTF(period.getStartDate().toString());
-                            dos.writeUTF(period.getEndDate().toString());
-                            dos.writeUTF(period.getTitle());
-                            dos.writeBoolean(period.getDescription() == null);
-                            if (period.getDescription() != null) {
-                                dos.writeUTF(period.getDescription());
-                            }
-                        }
-                    }
+                switch (entry.getKey()) {
+                    case SectionType.OBJECTIVE, SectionType.PERSONAL -> dos.writeUTF(((TextSection) abstractSection)
+                            .getContent());
+                    case SectionType.ACHIEVEMENT, SectionType.QUALIFICATIONS ->
+                            writeWithException(((ListSection) abstractSection).getContentList(), dos, dos::writeUTF);
+                    case SectionType.EXPERIENCE, SectionType.EDUCATION ->
+                            writeWithException(((CompanySection) abstractSection).getCompanies(), dos, company -> {
+                                dos.writeUTF(company.getName());
+                                dos.writeBoolean(company.getWebsite() == null);
+                                if (company.getWebsite() != null) {
+                                    dos.writeUTF(company.getWebsite());
+                                }
+                                writeWithException(company.getPeriods(), dos, period -> {
+                                    dos.writeUTF(period.getStartDate().toString());
+                                    dos.writeUTF(period.getEndDate().toString());
+                                    dos.writeUTF(period.getTitle());
+                                    dos.writeBoolean(period.getDescription() == null);
+                                    if (period.getDescription() != null) {
+                                        dos.writeUTF(period.getDescription());
+                                    }
+                                });
+                            });
                 }
-            }
+            });
         }
     }
 
@@ -107,6 +96,15 @@ public class DataStreamSerializer implements SerializationStrategy {
                 resume.addSection(sectionType, section);
             }
             return resume;
+        }
+    }
+
+    private <T> void writeWithException(Collection<T> coll, DataOutputStream dos,
+                                        CustomConsumer<T> action) throws IOException {
+        Objects.requireNonNull(action);
+        dos.writeInt(coll.size());
+        for (T t : coll) {
+            action.customAccept(t);
         }
     }
 }
