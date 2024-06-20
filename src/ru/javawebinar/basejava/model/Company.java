@@ -19,12 +19,12 @@ public class Company implements Serializable {
 
     }
 
-    public Company(List<Period> periods, String name, String website) {
-        this(periods, name);
+    public Company(String name, String website, List<Period> periods) {
+        this(name, periods);
         this.website = website;
     }
 
-    public Company(List<Period> periods, String name) {
+    public Company(String name, List<Period> periods) {
         Objects.requireNonNull(name, "name must not be null");
         Objects.requireNonNull(periods, "periods must not be null");
         this.periods = periods;

@@ -54,46 +54,24 @@ public class DataStreamSerializer implements SerializationStrategy {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
 
-            int contactsSize = dis.readInt();
-            for (int i = 0; i < contactsSize; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
+            int size = dis.readInt();
+            for (int i = 0; i < size; i++) {
+                resume.getContacts().put(ContactType.valueOf(dis.readUTF()), dis.readUTF());
             }
 
-            int sectionsSize = dis.readInt();
-            for (int i = 0; i < sectionsSize; i++) {
+            size = dis.readInt();
+            for (int i = 0; i < size; i++) {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                AbstractSection section = null;
-                switch (sectionType) {
-                    case SectionType.OBJECTIVE, SectionType.PERSONAL -> section = new TextSection(dis.readUTF());
-                    case SectionType.ACHIEVEMENT, SectionType.QUALIFICATIONS -> {
-                        int size = dis.readInt();
-                        List<String> list = new ArrayList<>();
-                        for (int j = 0; j < size; j++) {
-                            list.add(dis.readUTF());
-                        }
-                        section = new ListSection(list);
-                    }
-                    case SectionType.EXPERIENCE, SectionType.EDUCATION -> {
-                        int sizeCompanies = dis.readInt();
-                        List<Company> companies = new ArrayList<>();
-                        for (int j = 0; j < sizeCompanies; j++) {
-                            String name = dis.readUTF();
-                            String website = dis.readBoolean() ? null : dis.readUTF();
-                            int sizePeriods = dis.readInt();
-                            List<Period> periods = new ArrayList<>();
-                            for (int k = 0; k < sizePeriods; k++) {
-                                LocalDate startDate = LocalDate.parse(dis.readUTF());
-                                LocalDate endDate = LocalDate.parse(dis.readUTF());
-                                String title = dis.readUTF();
-                                String description = dis.readBoolean() ? null : dis.readUTF();
-                                periods.add(new Period(startDate, endDate, title, description));
-                            }
-                            companies.add(new Company(periods, name, website));
-                        }
-                        section = new CompanySection(companies);
-                    }
-                }
-                resume.addSection(sectionType, section);
+                resume.getSections().put(sectionType, switch (sectionType) {
+                    case SectionType.OBJECTIVE, SectionType.PERSONAL -> new TextSection(dis.readUTF());
+                    case SectionType.ACHIEVEMENT, SectionType.QUALIFICATIONS ->
+                            new ListSection(readWithException(dis.readInt(), dis::readUTF));
+                    case SectionType.EXPERIENCE, SectionType.EDUCATION ->
+                            new CompanySection(readWithException(dis.readInt(), () -> new Company(dis.readUTF(),
+                                    dis.readBoolean() ? null : dis.readUTF(), readWithException(dis.readInt(), () ->
+                                    new Period(LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()),
+                                            dis.readUTF(), dis.readBoolean() ? null : dis.readUTF())))));
+                });
             }
             return resume;
         }
@@ -106,5 +84,14 @@ public class DataStreamSerializer implements SerializationStrategy {
         for (T t : coll) {
             action.customAccept(t);
         }
+    }
+
+    private <T> List<T> readWithException(int size, CustomSupplier<T> action) throws IOException {
+        Objects.requireNonNull(action);
+        List<T> list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(action.customGet());
+        }
+        return list;
     }
 }

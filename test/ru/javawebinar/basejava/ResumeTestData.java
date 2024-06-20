@@ -10,23 +10,23 @@ public class ResumeTestData {
     public static Resume createResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        resume.addContact(ContactType.PHONE_NUMBER, "+7(921) 855-0482");
-        resume.addContact(ContactType.SKYPE, "grigory.kislin");
-        resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
-        resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin/");
-        resume.addContact(ContactType.GITHUB, "https://github.com/gkislin/");
-        resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin/");
-        resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru/");
+        resume.getContacts().put(ContactType.PHONE_NUMBER, "+7(921) 855-0482");
+        resume.getContacts().put(ContactType.SKYPE, "grigory.kislin");
+        resume.getContacts().put(ContactType.EMAIL, "gkislin@yandex.ru");
+        resume.getContacts().put(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin/");
+        resume.getContacts().put(ContactType.GITHUB, "https://github.com/gkislin/");
+        resume.getContacts().put(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin/");
+        resume.getContacts().put(ContactType.HOME_PAGE, "http://gkislin.ru/");
 
         // Text Sections
         TextSection personal = new TextSection("Аналитический склад ума, сильная логика, " +
                 "креативность, инициативность. " +
                 "Пурист кода и архитектуры.");
-        resume.addSection(SectionType.PERSONAL, personal);
+        resume.getSections().put(SectionType.PERSONAL, personal);
 
         TextSection objective = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web " +
                 "и Enterprise технологиям");
-        resume.addSection(SectionType.OBJECTIVE, objective);
+        resume.getSections().put(SectionType.OBJECTIVE, objective);
 
         //List Sections
         ListSection achievement = new ListSection(new ArrayList<>());
@@ -83,9 +83,9 @@ public class ResumeTestData {
                 DateUtil.now(),
                 "Автор проекта.",
                 "Создание, организация и проведение Java онлайн проектов и стажировок.");
-        Company company = new Company(new ArrayList<>(),
-                "Java Online Projects",
-                "https://www.javaops.ru/");
+        Company company = new Company("Java Online Projects",
+                "https://www.javaops.ru/",
+                new ArrayList<>());
         company.addPeriod(period);
         experience.addCompany(company);
 
@@ -95,7 +95,7 @@ public class ResumeTestData {
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, " +
                         "Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, " +
                         "авторизация по OAuth1, OAuth2, JWT SSO.");
-        company = new Company(new ArrayList<>(), "Wrike", "https://www.wrike.com/");
+        company = new Company("Wrike", "https://www.wrike.com/", new ArrayList<>());
         company.addPeriod(period);
         experience.addCompany(company);
 
@@ -109,7 +109,7 @@ public class ResumeTestData {
                         "в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS " +
                         "Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, " +
                         "xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python");
-        company = new Company(new ArrayList<>(), "RIT Center");
+        company = new Company("RIT Center", new ArrayList<>());
         company.addPeriod(period);
         experience.addCompany(company);
 
@@ -120,7 +120,7 @@ public class ResumeTestData {
                         "SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
                         "RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического " +
                         "трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
-        company = new Company(new ArrayList<>(), "Luxoft (Deutsche Bank)", "https://www.luxoft.com/");
+        company = new Company("Luxoft (Deutsche Bank)", "https://www.luxoft.com/", new ArrayList<>());
         company.addPeriod(period);
         experience.addCompany(company);
 
@@ -131,7 +131,7 @@ public class ResumeTestData {
                         "(GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). " +
                         "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента " +
                         "(Python/ Jython, Django, ExtJS)");
-        company = new Company(new ArrayList<>(), "Yota", "https://www.yota.ru/");
+        company = new Company("Yota", "https://www.yota.ru/", new ArrayList<>());
         company.addPeriod(period);
         experience.addCompany(company);
 
@@ -140,7 +140,7 @@ public class ResumeTestData {
                 "Разработчик ПО",
                 "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, " +
                         "JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
-        company = new Company(new ArrayList<>(), "Enkata", "https://www.enkata.com/");
+        company = new Company("Enkata", "https://www.enkata.com/", new ArrayList<>());
         company.addPeriod(period);
         experience.addCompany(company);
 
@@ -149,7 +149,7 @@ public class ResumeTestData {
                 "Разработчик ПО",
                 "Разработка информационной модели, проектирование интерфейсов, реализация и отладка " +
                         "ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
-        company = new Company(new ArrayList<>(), "Siemens AG", "https://www.siemens.com/");
+        company = new Company("Siemens AG", "https://www.siemens.com/", new ArrayList<>());
         company.addPeriod(period);
         experience.addCompany(company);
 
@@ -158,7 +158,7 @@ public class ResumeTestData {
                 "Инженер по аппаратному и программному тестированию",
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 " +
                         "(CHILL, ASM).");
-        company = new Company(new ArrayList<>(), "Alcatel", "https://www.alcatel.ru/");
+        company = new Company("Alcatel", "https://www.alcatel.ru/", new ArrayList<>());
         company.addPeriod(period);
         experience.addCompany(company);
 
@@ -167,39 +167,39 @@ public class ResumeTestData {
         period = new Period(DateUtil.of(2013, Month.MARCH),
                 DateUtil.of(2013, Month.MAY),
                 "'Functional Programming Principles in Scala' by Martin Odersky");
-        company = new Company(new ArrayList<>(), "Coursera", "https://www.coursera.org/course/progfun");
+        company = new Company("Coursera", "https://www.coursera.org/course/progfun", new ArrayList<>());
         company.addPeriod(period);
         education.addCompany(company);
 
         period = new Period(DateUtil.of(2011, Month.MARCH),
                 DateUtil.of(2011, Month.APRIL),
                 "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'");
-        company = new Company(new ArrayList<>(), "Luxoft",
-                "https://www.luxoft-training.ru/training/catalog/course.html?ID=22366");
+        company = new Company("Luxoft",
+                "https://www.luxoft-training.ru/training/catalog/course.html?ID=22366", new ArrayList<>());
         company.addPeriod(period);
         education.addCompany(company);
 
         period = new Period(DateUtil.of(2005, Month.JANUARY),
                 DateUtil.of(2005, Month.APRIL),
                 "3 месяца обучения мобильным IN сетям (Берлин)");
-        company = new Company(new ArrayList<>(), "Siemens AG", "https://www.siemens.com/");
+        company = new Company("Siemens AG", "https://www.siemens.com/", new ArrayList<>());
         company.addPeriod(period);
         education.addCompany(company);
 
         period = new Period(DateUtil.of(1997, Month.SEPTEMBER),
                 DateUtil.of(1998, Month.MARCH),
                 "6 месяцев обучения цифровым телефонным сетям (Москва)");
-        company = new Company(new ArrayList<>(), "Alcatel", "https://www.alcatel.ru/");
+        company = new Company("Alcatel", "https://www.alcatel.ru/", new ArrayList<>());
         company.addPeriod(period);
         education.addCompany(company);
 
         period = new Period(DateUtil.of(1993, Month.SEPTEMBER),
                 DateUtil.of(1996, Month.JULY),
                 "Аспирантура (программист С, С++)");
-        company = new Company(new ArrayList<>(),
-                "Санкт-Петербургский национальный исследовательский университет информационных " +
+        company = new Company("Санкт-Петербургский национальный исследовательский университет информационных " +
                         "технологий, механики и оптики",
-                "https://itmo.ru/");
+                "https://itmo.ru/",
+                new ArrayList<>());
         company.addPeriod(period);
         period = new Period(DateUtil.of(1987, Month.SEPTEMBER),
                 DateUtil.of(1993, Month.JULY),
@@ -210,18 +210,18 @@ public class ResumeTestData {
         period = new Period(DateUtil.of(1984, Month.SEPTEMBER),
                 DateUtil.of(1987, Month.JUNE),
                 "Закончил с отличием");
-        company = new Company(new ArrayList<>(),
-                "Заочная физико-техническая школа при МФТИ",
-                "https://mipt.ru/");
+        company = new Company("Заочная физико-техническая школа при МФТИ",
+                "https://mipt.ru/",
+                new ArrayList<>());
         company.addPeriod(period);
         education.addCompany(company);
 
-        resume.addSection(SectionType.PERSONAL, personal);
-        resume.addSection(SectionType.OBJECTIVE, objective);
-        resume.addSection(SectionType.ACHIEVEMENT, achievement);
-        resume.addSection(SectionType.QUALIFICATIONS, qualifications);
-        resume.addSection(SectionType.EXPERIENCE, experience);
-        resume.addSection(SectionType.EDUCATION, education);
+        resume.getSections().put(SectionType.PERSONAL, personal);
+        resume.getSections().put(SectionType.OBJECTIVE, objective);
+        resume.getSections().put(SectionType.ACHIEVEMENT, achievement);
+        resume.getSections().put(SectionType.QUALIFICATIONS, qualifications);
+        resume.getSections().put(SectionType.EXPERIENCE, experience);
+        resume.getSections().put(SectionType.EDUCATION, education);
 
         // Output
         System.out.println(resume.getFullName() + "\n");
