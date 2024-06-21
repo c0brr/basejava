@@ -22,6 +22,7 @@ public class DataStreamSerializer implements SerializationStrategy {
             Map<SectionType, AbstractSection> sections = resume.getSections();
             writeWithException(sections.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
+                dos.writeUTF(entry.getKey().name());
                 AbstractSection abstractSection = entry.getValue();
                 switch (entry.getKey()) {
                     case SectionType.OBJECTIVE, SectionType.PERSONAL -> dos.writeUTF(((TextSection) abstractSection)
@@ -53,26 +54,19 @@ public class DataStreamSerializer implements SerializationStrategy {
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
-
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                resume.getContacts().put(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-
-            size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                resume.getSections().put(sectionType, switch (sectionType) {
-                    case SectionType.OBJECTIVE, SectionType.PERSONAL -> new TextSection(dis.readUTF());
-                    case SectionType.ACHIEVEMENT, SectionType.QUALIFICATIONS ->
-                            new ListSection(readWithException(dis.readInt(), dis::readUTF));
-                    case SectionType.EXPERIENCE, SectionType.EDUCATION ->
-                            new CompanySection(readWithException(dis.readInt(), () -> new Company(dis.readUTF(),
-                                    dis.readBoolean() ? null : dis.readUTF(), readWithException(dis.readInt(), () ->
-                                    new Period(LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()),
-                                            dis.readUTF(), dis.readBoolean() ? null : dis.readUTF())))));
-                });
-            }
+            readToMapWithException(dis.readInt(), resume.getContacts(), () ->
+                    ContactType.valueOf(dis.readUTF()), dis::readUTF);
+            readToMapWithException(dis.readInt(), resume.getSections(), () -> SectionType.valueOf(dis.readUTF()), () ->
+                    switch (SectionType.valueOf(dis.readUTF())) {
+                        case SectionType.OBJECTIVE, SectionType.PERSONAL -> new TextSection(dis.readUTF());
+                        case SectionType.ACHIEVEMENT, SectionType.QUALIFICATIONS ->
+                                new ListSection(readListWithException(dis.readInt(), dis::readUTF));
+                        case SectionType.EXPERIENCE, SectionType.EDUCATION ->
+                                new CompanySection(readListWithException(dis.readInt(), () -> new Company(dis.readUTF(),
+                                        dis.readBoolean() ? null : dis.readUTF(), readListWithException(dis.readInt(),
+                                        () -> new Period(LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()),
+                                                dis.readUTF(), dis.readBoolean() ? null : dis.readUTF())))));
+                    });
             return resume;
         }
     }
@@ -86,12 +80,19 @@ public class DataStreamSerializer implements SerializationStrategy {
         }
     }
 
-    private <T> List<T> readWithException(int size, CustomSupplier<T> action) throws IOException {
+    private <T> List<T> readListWithException(int size, CustomSupplier<T> action) throws IOException {
         Objects.requireNonNull(action);
         List<T> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             list.add(action.customGet());
         }
         return list;
+    }
+
+    private <K, V> void readToMapWithException(int size, Map<K, V> map, CustomSupplier<K> keyAction,
+                                               CustomSupplier<V> valueAction) throws IOException {
+        for (int i = 0; i < size; i++) {
+            map.put(keyAction.customGet(), valueAction.customGet());
+        }
     }
 }
