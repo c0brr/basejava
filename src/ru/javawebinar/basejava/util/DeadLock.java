@@ -1,6 +1,6 @@
-package ru.javawebinar.basejava;
+package ru.javawebinar.basejava.util;
 
-public class MainDeadLock {
+public class DeadLock {
     private static final SomeClass SOME_CLASS = new SomeClass();
     private static final AnotherSomeClass ANOTHER_SOME_CLASS = new AnotherSomeClass();
 
