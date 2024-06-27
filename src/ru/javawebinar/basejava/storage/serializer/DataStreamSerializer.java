@@ -54,9 +54,9 @@ public class DataStreamSerializer implements SerializationStrategy {
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
-            readToMapWithException(dis.readInt(), resume.getContacts(), () ->
-                    ContactType.valueOf(dis.readUTF()), dis::readUTF);
-            readToMapWithException(dis.readInt(), resume.getSections(), () -> SectionType.valueOf(dis.readUTF()), () ->
+            readToMapWithException(dis.readInt(), () ->
+                    resume.getContacts().put(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readToMapWithException(dis.readInt(), () -> resume.getSections().put(SectionType.valueOf(dis.readUTF()),
                     switch (SectionType.valueOf(dis.readUTF())) {
                         case SectionType.OBJECTIVE, SectionType.PERSONAL -> new TextSection(dis.readUTF());
                         case SectionType.ACHIEVEMENT, SectionType.QUALIFICATIONS ->
@@ -66,7 +66,7 @@ public class DataStreamSerializer implements SerializationStrategy {
                                         dis.readBoolean() ? null : dis.readUTF(), readListWithException(dis.readInt(),
                                         () -> new Period(LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()),
                                                 dis.readUTF(), dis.readBoolean() ? null : dis.readUTF())))));
-                    });
+                    }));
             return resume;
         }
     }
@@ -89,12 +89,10 @@ public class DataStreamSerializer implements SerializationStrategy {
         return list;
     }
 
-    private <K, V> void readToMapWithException(int size, Map<K, V> map, CustomSupplier<K> keyAction,
-                                               CustomSupplier<V> valueAction) throws IOException {
-        Objects.requireNonNull(keyAction);
-        Objects.requireNonNull(valueAction);
+    private <T> void readToMapWithException(int size, CustomSupplier<T> action) throws IOException {
+        Objects.requireNonNull(action);
         for (int i = 0; i < size; i++) {
-            map.put(keyAction.customGet(), valueAction.customGet());
+            action.customGet();
         }
     }
 }
