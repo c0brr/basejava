@@ -18,8 +18,7 @@ public class MainStreams {
         return Arrays.stream(values)
                 .distinct()
                 .sorted()
-                .reduce((subtotal, num) -> subtotal * 10 + num)
-                .getAsInt();
+                .reduce(0, (subtotal, num) -> subtotal * 10 + num);
     }
 
     private List<Integer> oddOrEven(List<Integer> integers) {
