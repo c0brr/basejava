@@ -1,9 +1,6 @@
 package ru.javawebinar.basejava.storage;
 
-import org.postgresql.util.PSQLException;
-import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.util.SqlHelper;
 
@@ -30,17 +27,10 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume resume) {
         sqlHelper.execute("INSERT INTO resume (uuid, full_name) VALUES(?, ?)", ps -> {
-            try {
-                ps.setString(1, resume.getUuid());
-                ps.setString(2, resume.getFullName());
-                ps.execute();
-                return null;
-            } catch (PSQLException e) {
-                if (e.getSQLState().equals("23505")) {
-                    throw new ExistStorageException(resume.getUuid());
-                }
-                throw new StorageException("Save error", resume.getUuid(), e);
-            }
+            ps.setString(1, resume.getUuid());
+            ps.setString(2, resume.getFullName());
+            ps.execute();
+            return null;
         });
     }
 

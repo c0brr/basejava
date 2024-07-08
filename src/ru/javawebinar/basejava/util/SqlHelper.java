@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.util;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.sql.ConnectionFactory;
 
@@ -20,6 +21,9 @@ public class SqlHelper {
              PreparedStatement ps = conn.prepareStatement(query)) {
             return aBlockOfCode.execute(ps);
         } catch (SQLException e) {
+            if (e.getSQLState().equals("23505")) {
+                throw new ExistStorageException("Existing uuid");
+            }
             throw new StorageException(e);
         }
     }
