@@ -5,6 +5,7 @@ import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,10 +38,7 @@ public class SqlStorage implements Storage {
                         ps.setString(2, resume.getFullName());
                         ps.execute();
                     }
-                    insertContacts(resume, conn.prepareStatement("""
-                                                                     INSERT INTO contact (resume_uuid, type, value)
-                                                                     VALUES (?,?,?)
-                                                                     """));
+                    insertContacts(resume, conn);
                     return null;
                 }
         );
@@ -102,10 +100,7 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 ps.execute();
             }
-            insertContacts(resume, conn.prepareStatement("""
-                                                             INSERT INTO contact (resume_uuid, type, value)
-                                                             VALUES (?,?,?)
-                                                             """));
+            insertContacts(resume, conn);
             return null;
         });
     }
@@ -141,8 +136,11 @@ public class SqlStorage implements Storage {
         });
     }
 
-    private void insertContacts(Resume resume, PreparedStatement ps) throws SQLException {
-        try (ps) {
+    private void insertContacts(Resume resume, Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("""
+                                                             INSERT INTO contact (resume_uuid, type, value)
+                                                             VALUES (?,?,?)
+                                                             """)) {
             for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
                 ps.setString(1, resume.getUuid());
                 ps.setString(2, entry.getKey().name());
