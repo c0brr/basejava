@@ -8,16 +8,9 @@ import ru.javawebinar.basejava.sql.SqlHelper;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlStorage implements Storage {
-    private static final String INSERT_CONTACTS = """
-                                                  INSERT INTO contact (resume_uuid, type, value)
-                                                  VALUES (?,?,?)
-                                                  """;
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
@@ -44,7 +37,10 @@ public class SqlStorage implements Storage {
                         ps.setString(2, resume.getFullName());
                         ps.execute();
                     }
-                    insertContacts(resume, conn.prepareStatement(INSERT_CONTACTS));
+                    insertContacts(resume, conn.prepareStatement("""
+                                                                     INSERT INTO contact (resume_uuid, type, value)
+                                                                     VALUES (?,?,?)
+                                                                     """));
                     return null;
                 }
         );
@@ -101,12 +97,15 @@ public class SqlStorage implements Storage {
             }
             try (PreparedStatement ps = conn.prepareStatement("""
                                                                   DELETE FROM contact
-                                                                  WHERE resume_uuid = ?
+                                                                   WHERE resume_uuid = ?
                                                                   """)) {
                 ps.setString(1, resume.getUuid());
                 ps.execute();
             }
-            insertContacts(resume, conn.prepareStatement(INSERT_CONTACTS));
+            insertContacts(resume, conn.prepareStatement("""
+                                                             INSERT INTO contact (resume_uuid, type, value)
+                                                             VALUES (?,?,?)
+                                                             """));
             return null;
         });
     }
@@ -127,7 +126,7 @@ public class SqlStorage implements Storage {
                                               ON r.uuid = c.resume_uuid
                                            ORDER BY full_name, uuid
                                        """, ps -> {
-            Map<String, Resume> map = new HashMap<>();
+            Map<String, Resume> map = new LinkedHashMap<>();
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String uuid = rs.getString("uuid");
@@ -138,7 +137,6 @@ public class SqlStorage implements Storage {
             }
             return map.values()
                     .stream()
-                    .sorted(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid))
                     .toList();
         });
     }
